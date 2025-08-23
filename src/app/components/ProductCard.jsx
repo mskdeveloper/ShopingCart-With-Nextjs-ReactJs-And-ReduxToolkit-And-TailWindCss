@@ -1,8 +1,22 @@
 import React from "react";
 import Image from "next/image";
 import { FaHeart, FaShoppingCart } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart, removeFromCart } from "../lib/cartSlice";
 
-const ProductCard = ({ image, text, price }) => {
+const ProductCard = ({ id, image, text, price }) => {
+  const dispatch = useDispatch();
+  const cartItems = useSelector((state) => state.cart.items);
+  const isInCart = cartItems.some((item) => item.id === id);
+
+  const handleToggleCart = () => {
+    if (isInCart) {
+      dispatch(removeFromCart(id));
+    } else {
+      dispatch(addToCart({ id, image, text, price, quantity: 1 }));
+    }
+  };
+
   return (
     <div className="bg-white rounded-lg shadow-md overflow-visible flex flex-col h-[280px]">
       <div className="relative w-full h-[200px]">
@@ -15,7 +29,12 @@ const ProductCard = ({ image, text, price }) => {
         <span className="text-xl font-bold text-gray-700">{price}</span>
         <div className="flex space-x-3">
           <FaHeart className="text-gray-600 hover:text-red-500 cursor-pointer" />
-          <FaShoppingCart className="text-gray-600 hover:text-green-500 cursor-pointer" />
+          <FaShoppingCart
+            className={`cursor-pointer ${
+              isInCart ? "text-green-500" : "text-gray-600 hover:text-green-500"
+            }`}
+            onClick={handleToggleCart}
+          />
         </div>
       </div>
     </div>

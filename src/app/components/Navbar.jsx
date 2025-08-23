@@ -9,12 +9,20 @@ import {
   FaTimes,
   FaBars,
 } from "react-icons/fa";
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+
+  const cartItems = useSelector((state) => state.cart.items);
+  const cartItemsCount = cartItems.reduce(
+    (total, item) => total + item.quantity,
+    0
+  );
+
   return (
     <nav className="sticky top-0 z-50 bg-slate-50 px-6 py-4 flex items-center justify-between">
       {/* left section logo */}
@@ -47,8 +55,13 @@ const Navbar = () => {
           <Link href="/wishlist">
             <FaHeart className="hover:text-[#a01f64]" />
           </Link>
-          <Link href="/cart">
+          <Link href="/cart" className="">
             <FaShoppingCart className="hover:text-[#a01f64]" />
+            {cartItemsCount > 0 && (
+              <span className="absolute  -right-1 text-xs text-white bg-[#a91f64] rounded-full px-1.5 py-0.5 ">
+                {cartItemsCount}
+              </span>
+            )}
           </Link>
         </div>
         {/* Menu icon */}

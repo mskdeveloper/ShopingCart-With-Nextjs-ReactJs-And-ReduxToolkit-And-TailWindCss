@@ -67,6 +67,7 @@ const CardCarousel = ({ title, cards }) => {
           {cards.map((card, index) => (
             <div className="px-2" key={index}>
               <ProductCard
+                id={card.id}
                 image={card.image}
                 text={card.text}
                 price={card.price}
